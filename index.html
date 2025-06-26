@@ -1,58 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Sylvie Business Group Report Form</title>
   <style>
-    body { font-family: Arial; background: #f4f4f4; padding: 2rem; }
-    form { background: #fff; padding: 20px; border-radius: 5px; width: 300px; }
-    input, select { width: 100%; margin-bottom: 1rem; padding: 10px; }
-    button { background: #28a745; color: #fff; padding: 10px; border: none; cursor: pointer; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      width: 320px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, select {
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background: #28a745;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      width: 100%;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #218838;
+    }
   </style>
 </head>
 <body>
-  <h2>Report Form</h2>
+
+  <h2>Sylvie Business Group Report</h2>
+
   <form id="reportForm">
     <input type="text" name="service" placeholder="Enter Service" required />
     <input type="text" name="product" placeholder="Enter Product" required />
     <select name="payment" required>
-      <option value="">Select Payment</option>
-      <option value="Paid">MOBILE MONEY</option>
-      <option value="Pending">CASH</option>
-      <option value="Unpaid">DEPT</option>
+      <option value="">Select Payment Method</option>
+      <option value="MOBILE MONEY">MOBILE MONEY</option>
+      <option value="CASH">CASH</option>
+      <option value="DEPT">DEPT</option>
     </select>
     <button type="submit">Submit Report</button>
   </form>
 
   <script>
     const form = document.getElementById('reportForm');
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const data = {
         service: form.service.value,
         product: form.product.value,
-        payment: form.payment.value,
+        payment: form.payment.value
       };
 
       try {
         const response = await fetch("https://script.google.com/macros/s/AKfycbxpT13yXM_-NxgQ8IgUJX-A1OebuoHAfIpPpPb4w4USijPhGNPESwoO8Z0vW3YARnLa/exec", {
           method: "POST",
-          body: JSON.stringify(data),
           headers: {
             "Content-Type": "application/json"
-          }
+          },
+          body: JSON.stringify(data)
         });
 
-        if (response.ok) {
-          alert("Report submitted successfully!");
-          form.reset();
-        } else {
-          alert("Submission failed. Please try again.");
-        }
+        const result = await response.text();
+        alert("Report submitted: " + result);
+        form.reset();
       } catch (error) {
         alert("Error: " + error.message);
+        console.error(error);
       }
     });
   </script>
+
 </body>
 </html>
